@@ -1,12 +1,3 @@
-/**
- * @file simplelinearregression.h
- * @author Sly Kint A. Bacalso
- * @date 2022-03-26
- * 
- * @copyright Copyright (c) 2022
- * 
- */
-
 #include <iostream>
 #include <vector>
 #include <math.h>
@@ -17,6 +8,7 @@ using namespace std;
 class SimpleLinearRegression {
     double b0;
     double b1;
+
     double alpha;
     int epoch;
     bool normalize;
@@ -29,7 +21,7 @@ class SimpleLinearRegression {
             this->Y = Y;
             this->alpha = alpha;
             this->epoch = epoch;
-            b0 = 0;
+            b0 = 0.05;
             b1 = 0;
             this->normalize = normalize;
         }
@@ -122,11 +114,11 @@ class SimpleLinearRegression {
 
         // predict the value of Y
         double predict(double x) {
-            return b1 * x + b0;
+            return b0 + b1 * x;
         }
 
         void print_yhat(){
-            cout << "Yhat: " << b0 << " + " << b1  << "x" << endl;
+            cout << "Yhat: " << b0 << " + " << b1 << "x" << endl;
         }
 
         // predict the value of Y with X vector
