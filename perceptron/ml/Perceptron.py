@@ -12,6 +12,7 @@ class Perceptron:
         self.bias = bias
         self.learning_rate = learning_rate
         self.weights = np.random.rand(1225)
+        self.d_total = 0
 
     def sumNodes(self, X_i):
         return np.dot(X_i, self.weights) + self.bias
@@ -28,7 +29,6 @@ class Perceptron:
         zipped_data = list(zip(self.X, self.Y))
         np.random.shuffle(zipped_data)
         self.X, self.Y = zip(*zipped_data)
-        d_total = 0
         epoch = 1000
         for i in range(epoch):
             for x_i, y_i in zip(self.X, self.Y):
@@ -37,4 +37,17 @@ class Perceptron:
                 error = y_i - y_pred
                 self.weights += self.learning_rate * error * x_i
                 self.bias += self.learning_rate * error
-                d_total += np.abs(error)
+                self.d_total += np.abs(error)
+            print("Weights: ", self.weights)
+            print("Total error: ", self.d_total)
+
+    def updateSingle(self, x, y):
+        linear_output = self.sumNodes(x)
+        y_pred = self.activation(linear_output)
+        error = y - y_pred
+        self.weights += self.learning_rate * error * x
+        self.bias += self.learning_rate * error
+        self.d_total += np.abs(error)
+        print("Weights: ", self.weights)
+        print("Error: ", error)
+        print("Total error: ", self.d_total)

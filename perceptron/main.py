@@ -3,24 +3,26 @@ import shutil
 from tkinter import *
 from PIL import Image, ImageTk
 import numpy as np
-import os
 
 from ml.Perceptron import Perceptron
 
 root = Tk()
-root.title("Vowel Recognition")
+root.title("Vowel Recognition With Perceptron")
 root.geometry("500x350")
 
 perceptron = Perceptron()
+print("Starting...")
+print("Training...")
 perceptron.update()
+print("Already trained!")
 
 def open_popup():
     top = Toplevel()
     top.title("Output Correction")
     top.geometry("400x150")
     label = Label(top, text="Select the correct vowel identification:", font=('Helvetica 12'))
-    v_btn = Button(top, text="vowel", font=('Helvetica 14 bold'), command=lambda: update_and_save(top, "vowel_recognition.png","1-"+ str(datetime.datetime.now()) + ".png"))
-    nv_btn = Button(top, text="not a vowel", font=('Helvetica 14 bold'), command=lambda: update_and_save(top, "vowel_recognition.png","0-"+ str(datetime.datetime.now()) + ".png"))
+    v_btn = Button(top, text="vowel", font=('Helvetica 14 bold'), command=lambda: update_and_save_v(top, "vowel_recognition.png","1-"+ str(datetime.datetime.now()) + ".png"))
+    nv_btn = Button(top, text="not a vowel", font=('Helvetica 14 bold'), command=lambda: update_and_save_nv(top, "vowel_recognition.png","0-"+ str(datetime.datetime.now()) + ".png"))
     label.pack(pady=20)
     v_btn.place(x=90, y=60)
     nv_btn.place(x=200, y=60)
@@ -28,7 +30,6 @@ def open_popup():
 # on submit button click show pop up output
 def incorrect():
     open_popup()
-    perceptron.update()
 
 def submit():
     output_value.text = ""
@@ -61,10 +62,24 @@ def update_img_label(path):
     img_label.configure(image=photo)
     img_label.image = photo
 
-
-
-def update_and_save(event, existing_file, new_file, dir_name="ml/img-datasets/", ):
+def update_and_save_v(event, existing_file, new_file, dir_name="ml/img-datasets/", ):
     shutil.copy(existing_file, dir_name + new_file)
+    img = Image.open(existing_file)
+    img = img.convert('L')
+    data_img = np.array(img)
+    data_img = np.where(data_img > 0, 0, 1)
+    data_img = data_img.flatten()
+    perceptron.updateSingle(data_img, 1)
+    event.destroy()
+
+def update_and_save_nv(event, existing_file, new_file, dir_name="ml/img-datasets/", ):
+    shutil.copy(existing_file, dir_name + new_file)
+    img = Image.open(existing_file)
+    img = img.convert('L')
+    data_img = np.array(img)
+    data_img = np.where(data_img > 0, 0, 1)
+    data_img = data_img.flatten()
+    perceptron.updateSingle(data_img, 0)
     event.destroy()
 
 def paint(event):
@@ -81,7 +96,7 @@ wn = Canvas(root, width=250, height=250, bg='white')
 btn = Button(root, text="Submit", command=lambda: submit())
 incorrect_button = Button(root, text="Incorrect", command=lambda: incorrect())
 clr_btn = Button(root, text="Clear", command=lambda: clear_canvas(wn))
-output_label = Label(root, text="Output: ")
+output_label = Label(root, text="Output Prediction: ")
 output_value = Label(root, text="", font=('Helvetica 14 bold'))
 txt_label = Label(root, text="Input 35x35")
 img_label = Label(root)
@@ -89,7 +104,7 @@ img_label = Label(root)
 
 wn.bind('<B1-Motion>', paint)
 wn.place(x=20, y=20)
-output_label.place(x=300, y=150)
+output_label.place(x=300, y=170)
 output_value.place(x=300, y=200)
 txt_label.place(x=300, y=125)
 img_label.place(x=300, y=20)
