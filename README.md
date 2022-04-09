@@ -1,6 +1,6 @@
 # machine-learning
 
-### Running some program here will require matplotlib-cpp library
+### Running some C++ program here will require matplotlib-cpp library
 
 
 ##### To run a programm that requires [matplotlib-cpp](https://github.com/lava/matplotlib-cpp) just execute this command or read more documentations [here](https://github.com/lava/matplotlib-cpp).
