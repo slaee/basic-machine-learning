@@ -1,3 +1,6 @@
+# Perceptron nueral network
+# written by Sly Kint A. Bacalso
+
 import numpy as np
 
 from ml.ImageDataset import ImageDataset
@@ -14,25 +17,25 @@ class Perceptron:
         self.weights = np.zeros(len(X[0]), dtype=float)
         self.d_total = 0
 
-    def sumNodes(self, X_i):
+    def net_input(self, X_i):
         return np.dot(X_i, self.weights) + self.bias # net input
 
-    def activation(self, sumNodes):
-        return np.where(sumNodes >= 0, 1, 0) # activation function
+    def activation(self, net_input):
+        return np.where(net_input >= 0, 1, 0) # activation function
 
     def predict(self, X):
-        linear_output = self.sumNodes(X)
+        linear_output = self.net_input(X)
         y_pred = self.activation(linear_output)
         return y_pred
     
     def train(self):
-        zipped_data = list(zip(self.X, self.Y))
-        np.random.shuffle(zipped_data)
-        self.X, self.Y = zip(*zipped_data)
         epoch = 100
         for i in range(epoch):
+            zipped_data = list(zip(self.X, self.Y))
+            np.random.shuffle(zipped_data)
+            self.X, self.Y = zip(*zipped_data)
             for x_i, y_i in zip(self.X, self.Y):
-                linear_output = self.sumNodes(x_i)
+                linear_output = self.net_input(x_i)
                 y_pred = self.activation(linear_output)
                 error = y_i - y_pred
                 self.weights += self.learning_rate * error * x_i
@@ -45,14 +48,14 @@ class Perceptron:
     def evaluate(self, X, Y):
         correct = 0
         for x_i, y_i in zip(X, Y):
-            linear_output = self.sumNodes(x_i)
+            linear_output = self.net_input(x_i)
             y_pred = self.activation(linear_output)
             if y_pred == y_i:
                 correct += 1
         return correct / len(X)
 
     def update(self, x, y):
-        linear_output = self.sumNodes(x)
+        linear_output = self.net_input(x)
         y_pred = self.activation(linear_output)
         error = y - y_pred
         self.weights += self.learning_rate * error * x
