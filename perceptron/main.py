@@ -5,6 +5,7 @@ from PIL import Image, ImageTk
 import numpy as np
 
 from ml.Perceptron import Perceptron
+from ml.ImageDataset import ImageDataset
 
 root = Tk()
 root.title("Vowel Recognition With Perceptron")
@@ -13,8 +14,14 @@ root.geometry("500x350")
 perceptron = Perceptron()
 print("Starting...")
 print("Training...")
-perceptron.update()
-print("Already trained!")
+perceptron.train()
+print("Trained!")
+
+print("\nTesting...")
+imgDataSets = ImageDataset()
+imgDataSets.to2Dflatten()
+test_acc = perceptron.evaluate(imgDataSets.dataX(), imgDataSets.labelY()) 
+print('Accuracy: %.2f%%' % (test_acc * 100))
 
 def open_popup():
     top = Toplevel()
@@ -69,7 +76,7 @@ def update_and_save_v(event, existing_file, new_file, dir_name="ml/img-datasets/
     data_img = np.array(img)
     data_img = np.where(data_img > 0, 0, 1)
     data_img = data_img.flatten()
-    perceptron.updateSingle(data_img, 1)
+    perceptron.update(data_img, 1)
     event.destroy()
 
 def update_and_save_nv(event, existing_file, new_file, dir_name="ml/img-datasets/", ):
@@ -79,7 +86,7 @@ def update_and_save_nv(event, existing_file, new_file, dir_name="ml/img-datasets
     data_img = np.array(img)
     data_img = np.where(data_img > 0, 0, 1)
     data_img = data_img.flatten()
-    perceptron.updateSingle(data_img, 0)
+    perceptron.update(data_img, 0)
     event.destroy()
 
 def paint(event):
