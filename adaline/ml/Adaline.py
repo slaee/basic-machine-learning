@@ -1,4 +1,4 @@
-# Perceptron nueral network
+# Adaline nueral network
 # written by Sly Kint A. Bacalso
 
 import numpy as np
