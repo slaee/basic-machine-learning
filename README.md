@@ -1,4 +1,4 @@
-# machine-learning
+# Machinel learning with C++ and Python
 
 ### Running some C++ program here will require matplotlib-cpp library
 
