@@ -40,7 +40,7 @@ class Perceptron:
                 error = y_i - y_pred
                 self.weights += self.learning_rate * error * x_i
                 self.bias += self.learning_rate * error
-                self.d_total += np.abs(error)
+                self.d_total += error
             print("\n[EPOCH]: ", i)
             print("Weights: ", self.weights)
             print("Total error: ", self.d_total)
@@ -60,7 +60,7 @@ class Perceptron:
         error = y - y_pred
         self.weights += self.learning_rate * error * x
         self.bias += self.learning_rate * error
-        self.d_total += np.abs(error)
+        self.d_total += error
         print("\n[UPDATE]")
         print("Weights: ", self.weights)
         print("Error: ", error)
